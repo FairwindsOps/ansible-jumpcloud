@@ -1,0 +1,4 @@
+---
+- name: 'Restart JC Agent'
+  command: "/etc/init.d/jcagent restart"
+  tags: [jc, jc-agent]

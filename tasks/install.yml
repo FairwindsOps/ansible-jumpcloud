@@ -1,0 +1,63 @@
+---
+
+- name: get secrets.yml from S3
+  s3:
+    bucket: "rt-prod"
+    object: "secrets.yml"
+    mode: 'getstr'
+  register: secrets
+  changed_when: false
+
+- set_fact:
+    "{{item}}": "{{(secrets.contents|from_yaml)['all'][item]}}"
+  with_items:
+    - jumpcloud_connect_key
+
+- service:
+    name: jcagent
+    state: started
+  register: jcagent_result
+  ignore_errors: true
+  tags: jcagent
+
+- get_url:
+    url: 'https://kickstart.jumpcloud.com/Kickstart'
+    headers: "x-connect-key:{{jumpcloud_connect_key}}"
+    dest: /tmp/jc.install.sh
+    mode: 0775
+  when: not (jcagent_result|success)
+  tags: jcagent
+
+- shell:
+    /tmp/jc.install.sh
+  become: yes
+  become_user: root
+  tags: jcagent
+  when: not (jcagent_result|success)
+
+- name: install jumpcloud gem
+  environment:
+    HOME: /root
+  gem:
+    name: jumpcloud
+    include_doc: no
+  become: yes
+  tags: jcagent
+
+- name: create /tmp/jumpcloud_tag.rb
+  copy:
+    content: |
+      require 'jumpcloud'
+      JumpCloud.set_system_tags("deploy")
+    dest: /tmp/jumpcloud_tag.rb
+  become: yes
+  become_user: root
+  tags: jcagent
+
+- name: run /tmp/jumpcloud_tag.rb
+  environment:
+    HOME: /root
+  shell: /usr/bin/ruby /tmp/jumpcloud_tag.rb
+  tags: jcagent
+  changed_when: false
+
