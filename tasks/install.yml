@@ -34,18 +34,32 @@
   become_user: root
   tags: jcagent
   when: not (jcagent_result|success)
-  register: jc_install
-  
-- debug: msg={{jc_install}}
+
+- name: create /tmp/jumpcloud_tag.rb
+  copy:
+    content: |
+      gem 'jumpcloud', git: 'https://github.com/tkling/jumpcloud-ruby-gem.git'
+    dest: /tmp/Gemfile
+  become: yes
+  become_user: root
+  tags: jcagent
 
 - name: install jumpcloud gem
   environment:
     HOME: /root
-  gem:
-    name: jumpcloud
-    include_doc: no
+  bundler:
+    gemfile: /tmp/Gemfile
   become: yes
   tags: jcagent
+
+#- name: install jumpcloud gem
+#  environment:
+#    HOME: /root
+#  gem:
+#    name: jumpcloud
+#    include_doc: no
+#  become: yes
+#  tags: jcagent
 
 - name: create /tmp/jumpcloud_tag.rb
   copy:
