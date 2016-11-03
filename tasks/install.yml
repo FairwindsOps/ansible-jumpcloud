@@ -2,7 +2,7 @@
 
 - name: get secrets.yml from S3
   s3:
-    bucket: "rt-prod"
+    bucket: "rt-production"
     object: "secrets.yml"
     mode: 'getstr'
   register: secrets
