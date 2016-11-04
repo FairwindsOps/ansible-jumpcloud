@@ -50,6 +50,7 @@
   bundler:
     gemfile: /tmp/Gemfile
   become: yes
+  register: jc_bundle
   tags: jcagent
 
 #- name: install jumpcloud gem
@@ -60,6 +61,16 @@
 #    include_doc: no
 #  become: yes
 #  tags: jcagent
+
+- name: debug
+  shell: which jumpcloud
+  ignore_errors: true
+  register: jc_path
+  
+  
+- debug: msg={{jc_bundle}}
+
+- debug: msg={{jc_path}}
 
 - name: create /tmp/jumpcloud_tag.rb
   copy:
