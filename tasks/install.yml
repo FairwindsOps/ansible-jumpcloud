@@ -38,7 +38,7 @@
 - name: create /tmp/jumpcloud_tag.rb
   copy:
     content: |
-      gem 'jumpcloud', git: 'https://github.com/tkling/jumpcloud-ruby-gem.git'
+      gem 'jumpcloud', git: 'https://github.com/reactiveops/jumpcloud-ruby-gem.git'
     dest: /tmp/Gemfile
   become: yes
   become_user: root
