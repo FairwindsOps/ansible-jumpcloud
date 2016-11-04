@@ -63,10 +63,10 @@
 #  tags: jcagent
 
 - name: debug
-  shell: which jumpcloud
+  shell: bundle show jumpcloud
   ignore_errors: true
+  become: yes
   register: jc_path
-  
   
 - debug: msg={{jc_bundle}}
 
@@ -86,6 +86,7 @@
   environment:
     HOME: /root
   shell: /usr/bin/ruby /tmp/jumpcloud_tag.rb
+  become: yes
   tags: jcagent
   changed_when: false
 
