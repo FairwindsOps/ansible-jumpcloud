@@ -85,7 +85,9 @@
 - name: run /tmp/jumpcloud_tag.rb
   environment:
     HOME: /root
-  shell: /usr/bin/ruby /tmp/jumpcloud_tag.rb
+  args:
+    chdir: /tmp
+  shell: bundle exec ruby jumpcloud_tag.rb
   become: yes
   tags: jcagent
   changed_when: false
