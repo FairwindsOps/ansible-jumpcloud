@@ -2,7 +2,7 @@
 
 - name: get secrets.yml from S3
   s3:
-    bucket: "rt-production"
+    bucket: "{{ secrets_bucket }}"
     object: "secrets.yml"
     mode: 'getstr'
   register: secrets
@@ -67,7 +67,7 @@
   ignore_errors: true
   become: yes
   register: jc_path
-  
+
 - debug: msg={{jc_bundle}}
 
 - debug: msg={{jc_path}}
@@ -91,4 +91,3 @@
   become: yes
   tags: jcagent
   changed_when: false
-
