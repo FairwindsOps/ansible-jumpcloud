@@ -13,13 +13,6 @@
 #   with_items:
 #     - jumpcloud_connect_key
 
-- service:
-    name: jcagent
-    state: started
-  register: jcagent_result
-  ignore_errors: true
-  tags: jcagent
-
 - get_url:
     url: "{{ jumpcloud_installer_url }}"
     headers: "x-connect-key:{{ jumpcloud_connect_key }}"
@@ -91,3 +84,10 @@
   become: yes
   tags: jcagent
   changed_when: false
+
+- service:
+    name: jcagent
+    state: started
+  register: jcagent_result
+  ignore_errors: true
+  tags: jcagent
