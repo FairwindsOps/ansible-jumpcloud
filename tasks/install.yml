@@ -1,17 +1,17 @@
 ---
 
-- name: get secrets.yml from S3
-  s3:
-    bucket: "{{ secrets_bucket }}"
-    object: "secrets.yml"
-    mode: 'getstr'
-  register: secrets
-  changed_when: false
-
-- set_fact:
-    "{{item}}": "{{(secrets.contents|from_yaml)['all'][item]}}"
-  with_items:
-    - jumpcloud_connect_key
+# - name: get secrets.yml from S3
+#   s3:
+#     bucket: "{{ secrets_bucket }}"
+#     object: "secrets.yml"
+#     mode: 'getstr'
+#   register: secrets
+#   changed_when: false
+#
+# - set_fact:
+#     "{{item}}": "{{(secrets.contents|from_yaml)['all'][item]}}"
+#   with_items:
+#     - jumpcloud_connect_key
 
 - service:
     name: jcagent
@@ -21,8 +21,8 @@
   tags: jcagent
 
 - get_url:
-    url: 'https://kickstart.jumpcloud.com/Kickstart'
-    headers: "x-connect-key:{{jumpcloud_connect_key}}"
+    url: "{{ jumpcloud_installer_url }}"
+    headers: "x-connect-key:{{ jumpcloud_connect_key }}"
     dest: /tmp/jc.install.sh
     mode: 0775
   when: not (jcagent_result|success)

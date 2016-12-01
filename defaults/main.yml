@@ -1,7 +1,7 @@
 ---
-jc_installer_script: "https://kickstart.jumpcloud.com/Kickstart"
+jumpcloud_installer_url: "https://kickstart.jumpcloud.com/Kickstart"
 
 # Credentials
-jc_agent_accesskey: ""
+jumpcloud_connect_key: ""
 
 run: true
