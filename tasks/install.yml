@@ -82,6 +82,11 @@
   become_user: root
   tags: jcagent
 
+- command: ls -l /opt/jc
+  register: breep
+  become: true
+- debug: var=breep
+
 - name: run /tmp/jumpcloud_tag.rb
   environment:
     HOME: /root
