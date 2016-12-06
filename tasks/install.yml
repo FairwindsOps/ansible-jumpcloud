@@ -68,6 +68,12 @@
   become: true
 - debug: var=breep
 
+- name: wait for systemKey to be present
+  wait_for:
+    path: '/opt/jc/jcagent.conf'
+    search_regex: 'systemKey'
+  become: true
+
 - name: run /tmp/jumpcloud_tag.rb
   environment:
     HOME: /root
