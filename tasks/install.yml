@@ -27,7 +27,9 @@
   environment:
     HOME: /root
   bundler:
-    gemfile: /opt/jc/Gemfile
+    # gemfile: /opt/jc/Gemfile
+    state: latest
+    chdir: /opt/jc
   become: yes
   register: jc_bundle
   tags: jcagent

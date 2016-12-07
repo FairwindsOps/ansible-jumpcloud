@@ -7,7 +7,7 @@
   ignore_errors: true
   become: yes
 
-- name: create /tmp/jumpcloud_tag.rb
+- name: create jumpcloud_tag.rb
   copy:
     content: |
       require 'jumpcloud'
@@ -23,7 +23,7 @@
     search_regex: 'systemKey'
   become: true
 
-- name: run /tmp/jumpcloud_tag.rb
+- name: run jumpcloud_tag.rb
   environment:
     HOME: /root
   args:
