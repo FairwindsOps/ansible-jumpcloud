@@ -1,6 +1,10 @@
 ---
 
 - include: install.yml
+  when: jumpcloud_install
 
-#- include: run.yml
-#  when: run
+- include: tag.yml
+  when: jumpcloud_tag
+
+- include: cleanup.yml
+  when: jumpcloud_image_build

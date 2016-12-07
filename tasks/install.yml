@@ -6,7 +6,6 @@
     dest: /tmp/jc.install.sh
     mode: 0775
   register: jcagent_result
-  # when: not (jcagent_result|success)
   tags: jcagent
 
 - shell:
@@ -14,13 +13,12 @@
   become: yes
   become_user: root
   tags: jcagent
-  # when: not (jcagent_result|success)
 
-- name: create /tmp/jumpcloud_tag.rb
+- name: create jumpcloud gemfile
   copy:
     content: |
       gem 'jumpcloud', git: 'https://github.com/reactiveops/jumpcloud-ruby-gem.git'
-    dest: /tmp/Gemfile
+    dest: /opt/jc/Gemfile
   become: yes
   become_user: root
   tags: jcagent
@@ -29,7 +27,7 @@
   environment:
     HOME: /root
   bundler:
-    gemfile: /tmp/Gemfile
+    gemfile: /opt/jc/Gemfile
   become: yes
   register: jc_bundle
   tags: jcagent
@@ -52,57 +50,3 @@
 - debug: msg={{jc_bundle}}
 
 - debug: msg={{jc_path}}
-
-- name: create /tmp/jumpcloud_tag.rb
-  copy:
-    content: |
-      require 'jumpcloud'
-      JumpCloud.set_system_tags("deploy")
-    dest: /tmp/jumpcloud_tag.rb
-  become: yes
-  become_user: root
-  tags: jcagent
-
-- command: ls -l /opt/jc
-  register: breep
-  become: true
-- debug: var=breep
-
-- name: wait for systemKey to be present
-  wait_for:
-    path: '/opt/jc/jcagent.conf'
-    search_regex: 'systemKey'
-  become: true
-
-- name: run /tmp/jumpcloud_tag.rb
-  environment:
-    HOME: /root
-  args:
-    chdir: /tmp
-  shell: bundle exec ruby jumpcloud_tag.rb
-  become: yes
-  tags: jcagent
-  changed_when: false
-
-# if this is being installed as part of am AMI build we need to clean up
-# to allow registration to take place correctly later:
-# https://support.jumpcloud.com/customer/portal/articles/2399081-deploying-the-jumpcloud-agent-using-a-template-or-system-image
-
-- block:
-  - name: stop jumpcloud agent for image build clean up
-    service:
-      name: jcagent
-      state: stopped
-    become: yes
-
-  - name: cleanup config files for image build - {{ item }}
-    file:
-      path: "{{ item }}"
-      state: 'absent'
-    with_items:
-      - '/opt/jc/ca.crt'
-      - '/opt/jc/client.crt'
-      - '/opt/jc/client.key'
-      - '/opt/jc/jcagent.conf'
-    become: yes
-  when: jumpcloud_image_build

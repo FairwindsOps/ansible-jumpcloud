@@ -1,0 +1,28 @@
+---
+
+- name: create /tmp/jumpcloud_tag.rb
+  copy:
+    content: |
+      require 'jumpcloud'
+      JumpCloud.set_system_tags("{{ jumpcloud_tag_name }}")
+    dest: /opt/jc/jumpcloud_tag.rb
+  become: yes
+  become_user: root
+  tags: jcagent
+
+- name: wait for systemKey to be present
+  wait_for:
+    path: '/opt/jc/jcagent.conf'
+    search_regex: 'systemKey'
+  become: true
+
+- name: run /tmp/jumpcloud_tag.rb
+  environment:
+    HOME: /root
+  args:
+    chdir: /opt/jc
+  shell: bundle exec ruby jumpcloud_tag.rb
+  become: yes
+  tags: jcagent
+  changed_when: false
+  ignore_errors: true

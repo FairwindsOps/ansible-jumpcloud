@@ -5,4 +5,6 @@ jumpcloud_installer_url: "https://kickstart.jumpcloud.com/Kickstart"
 jumpcloud_connect_key: ""
 jumpcloud_image_build: false
 
-run: true
+jumpcloud_install: true
+jumpcloud_tag: false
+jumpcloud_tag_name: 'jumpcloud'
