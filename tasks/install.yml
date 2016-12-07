@@ -30,6 +30,7 @@
     # gemfile: /opt/jc/Gemfile
     state: latest
     chdir: /opt/jc
+    executable: "{{ jumpcloud_bundler_command }}"
   become: yes
   register: jc_bundle
   tags: jcagent
@@ -44,7 +45,7 @@
 #  tags: jcagent
 
 - name: debug
-  shell: bundle show jumpcloud
+  shell: "{{ jumpcloud_bundle_command }} show jumpcloud"
   ignore_errors: true
   become: yes
   register: jc_path

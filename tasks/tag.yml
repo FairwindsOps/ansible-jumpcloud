@@ -28,7 +28,7 @@
     HOME: /root
   args:
     chdir: /opt/jc
-  shell: bundle exec ruby jumpcloud_tag.rb
+  shell: "{{ jumpcloud_bundle_bin}} exec ruby jumpcloud_tag.rb"
   become: yes
   tags: jcagent
   changed_when: false
