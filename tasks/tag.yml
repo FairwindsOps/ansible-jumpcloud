@@ -1,5 +1,11 @@
 ---
 
+- name: make sure jumpcloud agent is started
+  service:
+    name: jcagent
+    state: started
+  ignore_errors: true
+
 - name: create /tmp/jumpcloud_tag.rb
   copy:
     content: |
