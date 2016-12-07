@@ -5,6 +5,7 @@
     name: jcagent
     state: started
   ignore_errors: true
+  become: yes
 
 - name: create /tmp/jumpcloud_tag.rb
   copy:
