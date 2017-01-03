@@ -5,8 +5,6 @@ jumpcloud_installer_url: "https://kickstart.jumpcloud.com/Kickstart"
 jumpcloud_connect_key: ""
 
 jumpcloud_image_build: false
-jc_shutdown_cleanup: false
-jc_shutdown_cleanup_delete: true
 
 jumpcloud_install: true
 jumpcloud_tag: false
@@ -14,3 +12,6 @@ jumpcloud_tag_name: 'jumpcloud'
 
 jumpcloud_bundler_command: 'bundler'
 jumpcloud_bundle_command: 'bundle'
+
+jumpcloud_shutdown_cleanup: false
+jumpcloud_shutdown_cleanup_delete: false
