@@ -8,7 +8,7 @@
 
 - name: install deregistration | rename
   copy:
-    src: init-jumpcloud-cleanup-delete.sh
+    src: init-jumpcloud-cleanup-rename.sh
     dest: /etc/init.d/jumpcloud-cleanup
   when: not jumpcloud_shutdown_cleanup_delete
 
