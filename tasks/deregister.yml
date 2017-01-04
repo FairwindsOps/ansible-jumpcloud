@@ -22,5 +22,5 @@
 - name: enable the deregistraion service
   service:
     name: jumpcloud-cleanup
-    enable: yes
+    enabled: yes
     state: started
