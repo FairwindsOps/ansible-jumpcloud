@@ -9,7 +9,7 @@
 # Provides: jumpcloud-cleanup
 # Required-Start: $network $syslog
 # Required-Stop:
-# Default-Start:
+# Default-Start: 5
 # Default-Stop: 0
 # Short-Description: instance shutdown
 # Description: Run commands at system shutdown.
