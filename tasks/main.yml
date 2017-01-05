@@ -8,3 +8,6 @@
 
 - include: cleanup.yml
   when: jumpcloud_image_build
+
+- include: deregister.yml
+  when: jumpcloud_shutdown_cleanup

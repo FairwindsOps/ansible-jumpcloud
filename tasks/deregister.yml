@@ -1,0 +1,26 @@
+---
+
+- name: install deregistration | delete
+  copy:
+    src: init-jumpcloud-cleanup-delete.sh
+    dest: /etc/init.d/jumpcloud-cleanup
+  when: jumpcloud_shutdown_cleanup_delete
+
+- name: install deregistration | rename
+  copy:
+    src: init-jumpcloud-cleanup-rename.sh
+    dest: /etc/init.d/jumpcloud-cleanup
+  when: not jumpcloud_shutdown_cleanup_delete
+
+- name: make deregistration executable
+  file:
+    path: /etc/init.d/jumpcloud-cleanup
+    mode: 0755
+    owner: root
+    group: root
+
+- name: enable the deregistraion service
+  service:
+    name: jumpcloud-cleanup
+    enabled: yes
+    state: started

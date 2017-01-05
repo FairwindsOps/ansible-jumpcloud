@@ -30,6 +30,8 @@ To skip the install and only tag:
 - `jumpcloud_tag_name` is the tag to apply. default is `jumpcloud`
 - `jumpcloud_bundle_command` allows overriding the bundle command, which can include the path. default: `bundle`
 - `jumpcloud_bundler_command` allows overriding the bundler command, which can include the path. default: `bundler`
+- `jumpcloud_shutdown_cleanup` determines if an init script that de-registers the system on shutdown is installed. default: `false`
+- `jumpcloud_shutdown_cleanup_delete` whether to delete the instance from jumpcloud. default: `false`. this will only happen if `jumpcloud_shutdown_cleanup` is set to `true`.
 
 
 License
