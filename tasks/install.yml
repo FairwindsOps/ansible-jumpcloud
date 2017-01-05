@@ -1,31 +1,11 @@
 ---
 
-- name: get secrets.yml from S3
-  s3:
-    bucket: "{{ secrets_bucket }}"
-    object: "secrets.yml"
-    mode: 'getstr'
-  register: secrets
-  changed_when: false
-
-- set_fact:
-    "{{item}}": "{{(secrets.contents|from_yaml)['all'][item]}}"
-  with_items:
-    - jumpcloud_connect_key
-
-- service:
-    name: jcagent
-    state: started
-  register: jcagent_result
-  ignore_errors: true
-  tags: jcagent
-
 - get_url:
-    url: 'https://kickstart.jumpcloud.com/Kickstart'
-    headers: "x-connect-key:{{jumpcloud_connect_key}}"
+    url: "{{ jumpcloud_installer_url }}"
+    headers: "x-connect-key:{{ jumpcloud_connect_key }}"
     dest: /tmp/jc.install.sh
     mode: 0775
-  when: not (jcagent_result|success)
+  register: jcagent_result
   tags: jcagent
 
 - shell:
@@ -33,13 +13,12 @@
   become: yes
   become_user: root
   tags: jcagent
-  when: not (jcagent_result|success)
 
-- name: create /tmp/jumpcloud_tag.rb
+- name: create jumpcloud gemfile
   copy:
     content: |
       gem 'jumpcloud', git: 'https://github.com/reactiveops/jumpcloud-ruby-gem.git'
-    dest: /tmp/Gemfile
+    dest: /opt/jc/Gemfile
   become: yes
   become_user: root
   tags: jcagent
@@ -48,7 +27,10 @@
   environment:
     HOME: /root
   bundler:
-    gemfile: /tmp/Gemfile
+    # gemfile: /opt/jc/Gemfile
+    state: latest
+    chdir: /opt/jc
+    executable: "{{ jumpcloud_bundler_command }}"
   become: yes
   register: jc_bundle
   tags: jcagent
@@ -63,7 +45,7 @@
 #  tags: jcagent
 
 - name: debug
-  shell: bundle show jumpcloud
+  shell: "{{ jumpcloud_bundle_command }} show jumpcloud"
   ignore_errors: true
   become: yes
   register: jc_path
@@ -71,23 +53,3 @@
 - debug: msg={{jc_bundle}}
 
 - debug: msg={{jc_path}}
-
-- name: create /tmp/jumpcloud_tag.rb
-  copy:
-    content: |
-      require 'jumpcloud'
-      JumpCloud.set_system_tags("deploy")
-    dest: /tmp/jumpcloud_tag.rb
-  become: yes
-  become_user: root
-  tags: jcagent
-
-- name: run /tmp/jumpcloud_tag.rb
-  environment:
-    HOME: /root
-  args:
-    chdir: /tmp
-  shell: bundle exec ruby jumpcloud_tag.rb
-  become: yes
-  tags: jcagent
-  changed_when: false

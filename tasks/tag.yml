@@ -1,0 +1,35 @@
+---
+
+- name: make sure jumpcloud agent is started
+  service:
+    name: jcagent
+    state: started
+  ignore_errors: true
+  become: yes
+
+- name: create jumpcloud_tag.rb
+  copy:
+    content: |
+      require 'jumpcloud'
+      JumpCloud.set_system_tags("{{ jumpcloud_tag_name }}")
+    dest: /opt/jc/jumpcloud_tag.rb
+  become: yes
+  become_user: root
+  tags: jcagent
+
+- name: wait for systemKey to be present
+  wait_for:
+    path: '/opt/jc/jcagent.conf'
+    search_regex: 'systemKey'
+  become: true
+
+- name: run jumpcloud_tag.rb
+  environment:
+    HOME: /root
+  args:
+    chdir: /opt/jc
+  shell: "{{ jumpcloud_bundle_command }} exec ruby jumpcloud_tag.rb"
+  become: yes
+  tags: jcagent
+  changed_when: false
+  ignore_errors: true
