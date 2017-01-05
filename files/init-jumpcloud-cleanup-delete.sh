@@ -16,6 +16,10 @@
 ### END INIT INFO
 #
 
+######################################################################################
+# adapted from examples provided at https://github.com/TheJumpCloud/SystemContextAPI #
+######################################################################################
+
 case "$1" in
   start)
     touch /var/lock/subsys/jumpcloud-cleanup
