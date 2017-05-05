@@ -7,9 +7,19 @@
   ignore_errors: true
   become: yes
 
+- name: register jumpcloud gem path
+  environment:
+    HOME: /root
+  args:
+    chdir: /opt/jc
+  shell: "{{ jumpcloud_bundle_command }} show jumpcloud"
+  become: yes
+  register: gem_path
+
 - name: create jumpcloud_tag.rb
   copy:
     content: |
+      $LOAD_PATH.unshift "{{ gem_path.stdout }}/lib/"
       require 'jumpcloud'
       JumpCloud.set_system_tags("{{ jumpcloud_tag_name }}")
     dest: /opt/jc/jumpcloud_tag.rb
@@ -28,7 +38,7 @@
     HOME: /root
   args:
     chdir: /opt/jc
-  shell: "{{ jumpcloud_bundle_command }} exec ruby jumpcloud_tag.rb"
+  shell: "ruby jumpcloud_tag.rb"
   become: yes
   tags: jcagent
   changed_when: false
