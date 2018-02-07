@@ -3,6 +3,7 @@ jumpcloud_installer_url: "https://kickstart.jumpcloud.com/Kickstart"
 
 # Credentials
 jumpcloud_connect_key: ""
+jumpcloud_api_key: ""
 
 jumpcloud_image_build: false
 
@@ -15,3 +16,13 @@ jumpcloud_bundle_command: 'bundle'
 
 jumpcloud_shutdown_cleanup: false
 jumpcloud_shutdown_cleanup_delete: false
+
+jumpcloud_api_v1_url: "https://console.jumpcloud.com/api"
+jumpcloud_api_v2_url: "https://console.jumpcloud.com/api/v2"
+jumpcloud_system_groups: ""
+
+jumpcloud_displayName: "{{ inventory_hostname }}"
+jumpcloud_allowPublicKeyAuthentication: 'true'
+jumpcloud_allowSshPasswordAuthentication: 'true'
+jumpcloud_allowSshRootLogin: 'true'
+jumpcloud_allowMultiFactorAuthentication: 'false'
