@@ -24,10 +24,11 @@ To skip the install and only tag:
 
 ## Variables
 
+- `jumpcloud_connect_key` provides the X-Connect-Key that JumpCloud expects for authorization. default: `''`
 - `jumpcloud_image_build` if `true` will clean up registration information as part of an image build. default: `false`
-- `jumpcloud_install` determines if jumpcloud install should be run. default `true`
-- `jumpcloud_tag` will tag the system if set to `true`. default is `false`
-- `jumpcloud_tag_name` is the tag to apply. default is `jumpcloud`
+- `jumpcloud_install` determines if jumpcloud install should be run. default: `true`
+- `jumpcloud_tag` will tag the system if set to `true`. default: `false`
+- `jumpcloud_tag_name` is the tag to apply. default: `jumpcloud`
 - `jumpcloud_bundle_command` allows overriding the bundle command, which can include the path. default: `bundle`
 - `jumpcloud_bundler_command` allows overriding the bundler command, which can include the path. default: `bundler`
 - `jumpcloud_shutdown_cleanup` determines if an init script that de-registers the system on shutdown is installed. default: `false`
