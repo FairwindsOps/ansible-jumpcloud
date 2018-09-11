@@ -1,13 +1,13 @@
 ---
 
-- include: install.yml
+- include_tasks: install.yml
   when: jumpcloud_install
 
-- include: tag.yml
+- include_tasks: tag.yml
   when: jumpcloud_tag
 
-- include: cleanup.yml
+- include_tasks: cleanup.yml
   when: jumpcloud_image_build
 
-- include: deregister.yml
+- include_tasks: deregister.yml
   when: jumpcloud_shutdown_cleanup
